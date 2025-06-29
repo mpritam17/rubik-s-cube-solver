@@ -53,5 +53,5 @@ class cube {
                 a[i] = face(c[i]);
             }
         }
-        
+
 };
