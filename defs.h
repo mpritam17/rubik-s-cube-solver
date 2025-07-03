@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <iostream>
 using namespace std;
 class face {
     private :
@@ -27,7 +28,7 @@ class face {
         bool operator < (const face &f) const;
         bool operator == (const face &f) const;
 
-        // vector <vector <char>> get_colors() const;
+        vector <vector <char>> get_colors();
         // need functions to declare such as - u->, u <-, l ^, l v, r ^, r v, b <-, b -> 
 };
 
@@ -61,6 +62,9 @@ class cube {
         bool operator < (const cube &c) const;
         bool operator == (const cube &c) const;
 
+        void print();
+
+        // vector <face> get_faces();
         // vector <face> get_faces() const {
         //     return a;
         // }

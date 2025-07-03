@@ -5,12 +5,12 @@
 
 int main() {
     vector <vector <vector <char>>> initial_state = { // front, left, right, up, bottom, back;
-        {{'G', 'G', 'G'}, {'R', 'R', 'R'}, {'R', 'R', 'R'}},
-        {{'O', 'O', 'O'}, {'G', 'G', 'G'}, {'G', 'G', 'G'}},
-        {{'R', 'R', 'R'}, {'B', 'B', 'B'}, {'B', 'B', 'B'}},
-        {{'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}},
-        {{'B', 'B', 'B'}, {'O', 'O', 'O'}, {'O', 'O', 'O'}},
-        {{'W', 'W', 'W'}, {'W', 'W', 'W'}, {'W', 'W', 'W'}}
+        {{'R', 'W', 'R'}, {'W', 'W', 'W'}, {'W', 'W', 'W'}},
+        {{'G', 'G', 'W'}, {'G', 'G', 'G'}, {'G', 'G', 'G'}},
+        {{'W', 'B', 'B'}, {'B', 'B', 'B'}, {'B', 'B', 'B'}},
+        {{'R', 'R', 'R'}, {'R', 'R', 'R'}, {'G', 'R', 'B'}},
+        {{'O', 'O', 'O'}, {'O', 'O', 'O'}, {'O', 'O', 'O'}},
+        {{'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y'}}
     };
     cube c(initial_state);
     string ans = solve(c);

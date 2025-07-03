@@ -9,6 +9,7 @@ using namespace std;
 
 string solve (cube c) {
     c.calculate_cost();
+    c.print();
     vector <string> moves = {"F", "F'", "U", "U'", "D", "D'", "L", "L'", "R", "R'", "B", "B'"};
     priority_queue <pair <int, cube>> pq;
     map <cube, string> path;
@@ -22,6 +23,7 @@ string solve (cube c) {
             continue;
         }
         visited[curr] = true;
+        // cout << path[curr] << '\n';
         if (curr.get_cost() == 0) return path[curr];
         cube next = curr.F();
         if (!visited[next]) {

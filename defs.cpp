@@ -125,7 +125,7 @@ cube::cube (face f1, face f2, face f3, face f4, face f5, face f6) {
 void cube::calculate_cost() {
     cost = 0;
     for (face &f : a) {
-        cost = max(cost, f.diff());
+        cost += f.diff();
     }
 }
 
@@ -163,7 +163,7 @@ cube cube::U() {
     face temp2 = a[2].U(a[5].top_row(), true);
     face temp3 = a[3].F();
     face temp4 = a[4];
-    face temp5 = a[5].D(a[1].top_row(), true);
+    face temp5 = a[5].U(a[1].top_row(), true);
     cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
     new_cube.calculate_cost();
     return new_cube;
@@ -175,7 +175,7 @@ cube cube::U_prime() {
     face temp2 = a[2].U(a[0].top_row());
     face temp3 = a[3].F_prime();
     face temp4 = a[4];
-    face temp5 = a[5].D(a[2].top_row(), true);
+    face temp5 = a[5].U(a[2].top_row(), true);
     cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
     new_cube.calculate_cost();
     return new_cube;
@@ -291,4 +291,22 @@ bool cube::operator < (const cube &c) const {
 
 bool cube::operator == (const cube &c) const {
     return a == c.a;
+}
+
+void cube::print() {
+    for (face &f : a) {
+        for (vector <char> &row : f.get_colors()) {
+            for (char c : row) {
+                cout << c << ' ';
+            }
+            cout << '\n';
+        }
+        cout << "-----\n";
+    }
+
+    cout << "==========================\n";
+}
+
+vector <vector <char>> face::get_colors() {
+    return colors;
 }
