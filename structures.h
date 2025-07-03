@@ -11,13 +11,9 @@ class face {
         face F();
         face F_prime();
         face U(vector <char> ser, bool rev = false);
-        face U_prime(vector <char> ser, bool rev = false);
         face D(vector <char> ser, bool rev = false);
-        face D_prime(vector <char> ser, bool rev = false);
         face L(vector <char> ser, bool rev = false);
-        face L_prime(vector <char> ser, bool rev = false);
         face R(vector <char> ser, bool rev = false);
-        face R_prime(vector <char> ser, bool rev = false); 
         int diff();
         vector <char> top_row();
         vector <char> bottom_row();

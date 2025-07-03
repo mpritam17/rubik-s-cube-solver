@@ -42,27 +42,7 @@ face face::U(vector <char> ser, bool rev) {
     return face(temp);
 }
 
-face face::U_prime(vector <char> ser, bool rev) {
-    if (rev) {
-        reverse(ser.begin(), ser.end());
-    }
-    vector <vector <char>> temp;
-    temp = colors;
-    for (int i = 0; i < 3; ++i) temp[0][i] = ser[i];
-    return face(temp);
-}
-
 face face::D(vector <char> ser, bool rev) {
-    if (rev) {
-        reverse(ser.begin(), ser.end());
-    }
-    vector <vector <char>> temp;
-    temp = colors;
-    for (int i = 0; i < 3; ++i) temp[2][i] = ser[i];
-    return face(temp);
-}
-
-face face::D_prime(vector <char> ser, bool rev) {
     if (rev) {
         reverse(ser.begin(), ser.end());
     }
@@ -82,27 +62,7 @@ face face::L(vector <char> ser, bool rev) {
     return face(temp);
 }
 
-face face::L_prime(vector <char> ser, bool rev) {
-    if (rev) {
-        reverse(ser.begin(), ser.end());
-    }
-    vector <vector <char>> temp;
-    temp = colors;
-    for (int i = 0; i < 3; ++i) temp[i][0] = ser[i];
-    return face(temp);
-}
-
 face face::R(vector <char> ser, bool rev) {
-    if (rev) {
-        reverse(ser.begin(), ser.end());
-    }
-    vector <vector <char>> temp;
-    temp = colors;
-    for (int i = 0; i < 3; ++i) temp[i][2] = ser[i];
-    return face(temp);
-}
-
-face face::R_prime(vector <char> ser, bool rev) {
     if (rev) {
         reverse(ser.begin(), ser.end());
     }
@@ -199,35 +159,35 @@ cube cube::F_prime() {
 }
 
 cube cube::U() {
-    face temp3 = a[3].F();
     face temp0 = a[0].U(a[2].top_row());
     face temp1 = a[1].U(a[0].top_row());
     face temp2 = a[2].U(a[5].top_row(), true);
+    face temp3 = a[3].F();
     face temp4 = a[4];
-    face temp5 = a[5].D(a[1].bottom_row(), true);
+    face temp5 = a[5].D(a[1].top_row(), true);
     cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
     new_cube.calculate_cost();
     return new_cube;
 }
 
 cube cube::U_prime() {
-    face temp3 = a[3].F_prime();
     face temp0 = a[0].U(a[1].top_row());
     face temp1 = a[1].U(a[5].top_row(), true);
     face temp2 = a[2].U(a[0].top_row());
+    face temp3 = a[3].F_prime();
     face temp4 = a[4];
-    face temp5 = a[5].D(a[0].bottom_row(), true);
+    face temp5 = a[5].D(a[2].top_row(), true);
     cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
     new_cube.calculate_cost();
     return new_cube;
 }
 
 cube cube::D() {
-    face temp4 = a[4].F();
     face temp0 = a[0].D(a[1].bottom_row());
     face temp1 = a[1].D(a[5].bottom_row(), true);
     face temp2 = a[2].D(a[0].bottom_row());
     face temp3 = a[3];
+    face temp4 = a[4].F();
     face temp5 = a[5].D(a[2].bottom_row(), true);
     cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
     new_cube.calculate_cost();
@@ -235,12 +195,84 @@ cube cube::D() {
 }
 
 cube cube::D_prime() {
-    face temp4 = a[4].F_prime();
-    face temp0 = a[0].D(a[2].bottom_row(), true);
+    face temp0 = a[0].D(a[2].bottom_row());
     face temp1 = a[1].D(a[0].bottom_row());
-    face temp2 = a[2].D(a[5].bottom_row());
+    face temp2 = a[2].D(a[5].bottom_row(), true);
     face temp3 = a[3];
-    face temp5 = a[5].D(a[1].bottom_row());
+    face temp4 = a[4].F_prime();
+    face temp5 = a[5].D(a[1].bottom_row(), true);
+    cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
+    new_cube.calculate_cost();
+    return new_cube;
+}
+
+cube cube::L() {
+    face temp0 = a[0].L(a[3].left_column());
+    face temp1 = a[1].F();
+    face temp2 = a[2];
+    face temp3 = a[3].L(a[5].left_column(), true);
+    face temp4 = a[4].L(a[0].left_column());
+    face temp5 = a[5].R(a[1].left_column(), true);
+    cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
+    new_cube.calculate_cost();
+    return new_cube;
+}
+
+cube cube::L_prime() {
+    face temp0 = a[0].L(a[4].left_column());
+    face temp1 = a[1].F_prime();
+    face temp2 = a[2];
+    face temp3 = a[3].L(a[0].left_column());
+    face temp4 = a[4].L(a[5].left_column(), true);
+    face temp5 = a[5].R(a[3].left_column(), true);
+    cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
+    new_cube.calculate_cost();
+    return new_cube;    
+}
+
+cube cube::R() {
+    face temp0 = a[0].R(a[4].right_column());
+    face temp1 = a[1];
+    face temp2 = a[2].F();
+    face temp3 = a[3].R(a[0].right_column());
+    face temp4 = a[4].R(a[5].right_column(), true);
+    face temp5 = a[5].L(a[3].right_column(), true);
+    cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
+    new_cube.calculate_cost();
+    return new_cube;
+}
+
+cube cube::R_prime() {
+    face temp0 = a[0].R(a[3].right_column());
+    face temp1 = a[1];
+    face temp2 = a[2].F_prime();
+    face temp3 = a[3].R(a[5].right_column(), true);
+    face temp4 = a[4].R(a[0].right_column());
+    face temp5 = a[5].L(a[4].right_column(), true);
+    cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
+    new_cube.calculate_cost();
+    return new_cube;
+}
+
+cube cube::B() {
+    face temp0 = a[0];
+    face temp1 = a[1].L(a[4].bottom_row());
+    face temp2 = a[2].R(a[3].top_row());
+    face temp3 = a[3].U(a[1].left_column(), true);
+    face temp4 = a[4].D(a[2].right_column(), true);
+    face temp5 = a[5].F();
+    cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
+    new_cube.calculate_cost();
+    return new_cube;
+}
+
+cube cube::B_prime() {
+    face temp0 = a[0];
+    face temp1 = a[1].L(a[3].top_row(), true);
+    face temp2 = a[2].R(a[4].bottom_row(), true);
+    face temp3 = a[3].U(a[2].right_column());
+    face temp4 = a[4].D(a[1].left_column());
+    face temp5 = a[5].F_prime();
     cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
     new_cube.calculate_cost();
     return new_cube;
