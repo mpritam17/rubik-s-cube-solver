@@ -1,15 +1,15 @@
-#include "structures.h"
+#include "defs.h"
 using namespace std;
 face::face(vector <vector <char>> f) {
     colors = f;
 }
 
-face::face(face &f) {
+face::face(const face &f){
     colors = f.colors;
 }
 
 face face::F() {
-    vector <vector <char>> temp;
+    vector <vector <char>> temp(3, vector <char>(3));
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
             int x = j, y = 2 - i;
@@ -21,7 +21,7 @@ face face::F() {
 }
 
 face face::F_prime() {
-    vector <vector <char>> temp;
+    vector <vector <char>> temp(3, vector <char>(3));
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
             int x = j, y = 2 - i;
@@ -109,7 +109,7 @@ vector <char> face::right_column() {
 
 cube::cube(vector <vector <vector<char>>> c) {
     for (int i = 0; i < 6; ++i) {
-        a[i] = face(c[i]);
+        a.push_back(face(c[i]));
     }
 }
 
@@ -127,7 +127,6 @@ void cube::calculate_cost() {
     for (face &f : a) {
         cost = max(cost, f.diff());
     }
-    cost--;
 }
 
 int cube::get_cost() {
@@ -276,4 +275,20 @@ cube cube::B_prime() {
     cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
     new_cube.calculate_cost();
     return new_cube;
+}
+
+bool face::operator < (const face &f) const {
+    return colors < f.colors;
+}
+
+bool face::operator == (const face &f) const {
+    return colors == f.colors;
+}
+
+bool cube::operator < (const cube &c) const {
+    return a < c.a;
+}
+
+bool cube::operator == (const cube &c) const {
+    return a == c.a;
 }

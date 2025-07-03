@@ -1,3 +1,7 @@
+#ifndef DEFS_H
+#define DEFS_H
+
+
 #include <vector>
 #include <map>
 #include <algorithm>
@@ -7,7 +11,7 @@ class face {
         vector <vector <char>> colors;
     public:
         face(vector <vector <char>> f);
-        face(face &f);
+        face(const face &f);
         face F();
         face F_prime();
         face U(vector <char> ser, bool rev = false);
@@ -19,6 +23,11 @@ class face {
         vector <char> bottom_row();
         vector <char> left_column();
         vector <char> right_column();
+
+        bool operator < (const face &f) const;
+        bool operator == (const face &f) const;
+
+        // vector <vector <char>> get_colors() const;
         // need functions to declare such as - u->, u <-, l ^, l v, r ^, r v, b <-, b -> 
 };
 
@@ -48,4 +57,13 @@ class cube {
         cube R_prime();
         cube B();
         cube B_prime();
+
+        bool operator < (const cube &c) const;
+        bool operator == (const cube &c) const;
+
+        // vector <face> get_faces() const {
+        //     return a;
+        // }
 };
+
+#endif
