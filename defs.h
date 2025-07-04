@@ -19,7 +19,9 @@ class face {
         face D(vector <char> ser, bool rev = false);
         face L(vector <char> ser, bool rev = false);
         face R(vector <char> ser, bool rev = false);
-        int diff();
+        // int diff();
+        char get_color(int i = 1, int j = 1);
+        int add_cost(map <char, vector <int>> &m, int x, int y, int z);
         vector <char> top_row();
         vector <char> bottom_row();
         vector <char> left_column();
@@ -59,15 +61,12 @@ class cube {
         cube B();
         cube B_prime();
 
+        bool is_solved();
+
         bool operator < (const cube &c) const;
         bool operator == (const cube &c) const;
 
         void print();
-
-        // vector <face> get_faces();
-        // vector <face> get_faces() const {
-        //     return a;
-        // }
 };
 
 #endif

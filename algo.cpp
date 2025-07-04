@@ -11,6 +11,7 @@ string solve (cube c) {
     c.calculate_cost();
     c.print();
     vector <string> moves = {"F", "F'", "U", "U'", "D", "D'", "L", "L'", "R", "R'", "B", "B'"};
+                        //    1    2     3    4     5    6     7    8     9    A     B    C
     priority_queue <pair <int, cube>> pq;
     map <cube, string> path;
     map <cube, bool> visited;
@@ -23,8 +24,9 @@ string solve (cube c) {
             continue;
         }
         visited[curr] = true;
-        // cout << path[curr] << '\n';
-        if (curr.get_cost() == 0) return path[curr];
+        cout << "Current cost: " << curr.get_cost() << ", Path: " << path[curr] << '\n';
+        // curr.print();
+        if (curr.is_solved()) return path[curr];
         cube next = curr.F();
         if (!visited[next]) {
             string s = path[curr] + "1";

@@ -72,18 +72,8 @@ face face::R(vector <char> ser, bool rev) {
     return face(temp);
 }
 
-int face::diff() {
-    int d = 0;
-    map <char, int> m;
-    for (vector <char> &i: colors) {
-        for (char &c : i) {
-            m[c]++;
-        }
-    }
-    for (auto &p : m) {
-        if (p.first != colors[1][1]) d++;
-    }
-    return d;
+char face::get_color(int i, int j) {
+    return colors[i][j];
 }
 
 vector <char> face::top_row() {
@@ -122,11 +112,64 @@ cube::cube (face f1, face f2, face f3, face f4, face f5, face f6) {
     a.push_back(f6);
 }
 
-void cube::calculate_cost() {
-    cost = 0;
-    for (face &f : a) {
-        cost += f.diff();
+
+int face::add_cost(map <char, vector <int>> &m, int x, int y, int z) {
+    int cost = 0;
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            if (colors[i][j] != colors[1][1]) {
+                vector <int> pos = m[colors[i][j]], pos2 = m[colors[1][1]];
+                vector <int> curr(3);
+                if (y != 0) {
+                    curr[1] = i-1;
+                    if (x != 0) {
+                        curr[0] = j-1;
+                    } else {
+                        curr[2] = j-1;
+                    }
+                }
+                else {
+                    curr[2] = i-1;
+                    curr[0] = j-1;
+                }
+                curr[0] *= x;
+                curr[1] *= y;
+                curr[2] *= z;
+                if (x == 0) curr[0] = pos2[0];
+                else if (y == 0) curr[1] = pos2[1];
+                else curr[2] = pos2[2];
+                for (int k = 0; k < 3; ++k) {
+                    if (pos[k] != 0)
+                    cost += abs(curr[k] - pos[k]);
+                    if (i == 1 || j == 1) {
+                        if (pos[k] != 0) {
+                            cost += abs(curr[k] - pos[k]);
+                        }
+                    }
+                }
+            }
+        }
     }
+    return cost;
+}
+
+void cube::calculate_cost() {
+    map <char, vector<int>> m;
+    for (int i = 0; i < 6; ++i) {
+        vector <int> pos(3);
+        int j = (i+5)%6;
+        pos[j/2] = (j&1) ? 1 : -1;
+        m[a[i].get_color()] = pos;
+    }
+    cost = 0;
+    for (int i = 0; i < 6; ++i) {
+        vector <int> pos(3, 1);
+        int j = (i+5)%6;
+        pos[j/2] = 0;
+        if (j & 1) pos[2] *= -1;
+        cost += a[i].add_cost(m, pos[0], pos[1], pos[2]);
+    }
+    cost /= 16;
 }
 
 int cube::get_cost() {
@@ -211,7 +254,7 @@ cube cube::L() {
     face temp2 = a[2];
     face temp3 = a[3].L(a[5].left_column(), true);
     face temp4 = a[4].L(a[0].left_column());
-    face temp5 = a[5].R(a[1].left_column(), true);
+    face temp5 = a[5].L(a[4].left_column(), true);
     cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
     new_cube.calculate_cost();
     return new_cube;
@@ -223,7 +266,7 @@ cube cube::L_prime() {
     face temp2 = a[2];
     face temp3 = a[3].L(a[0].left_column());
     face temp4 = a[4].L(a[5].left_column(), true);
-    face temp5 = a[5].R(a[3].left_column(), true);
+    face temp5 = a[5].L(a[3].left_column(), true);
     cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
     new_cube.calculate_cost();
     return new_cube;    
@@ -235,7 +278,7 @@ cube cube::R() {
     face temp2 = a[2].F();
     face temp3 = a[3].R(a[0].right_column());
     face temp4 = a[4].R(a[5].right_column(), true);
-    face temp5 = a[5].L(a[3].right_column(), true);
+    face temp5 = a[5].R(a[3].right_column(), true);
     cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
     new_cube.calculate_cost();
     return new_cube;
@@ -247,7 +290,7 @@ cube cube::R_prime() {
     face temp2 = a[2].F_prime();
     face temp3 = a[3].R(a[5].right_column(), true);
     face temp4 = a[4].R(a[0].right_column());
-    face temp5 = a[5].L(a[4].right_column(), true);
+    face temp5 = a[5].R(a[4].right_column(), true);
     cube new_cube(temp0, temp1, temp2, temp3, temp4, temp5);
     new_cube.calculate_cost();
     return new_cube;
@@ -309,4 +352,17 @@ void cube::print() {
 
 vector <vector <char>> face::get_colors() {
     return colors;
+}
+
+bool cube::is_solved() {
+    for (face &f : a) {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (f.get_color(i, j) != f.get_color(1, 1)) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
 }
